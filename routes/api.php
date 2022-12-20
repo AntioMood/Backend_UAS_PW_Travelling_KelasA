@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
 
     return $request->user();
 
@@ -23,9 +23,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register', 'Api\AuthController@register');
 Route::post('login', 'Api\AuthController@login');
 
-Route::get('users/{id}', 'Api\UserController@show');
-Route::put('users/{id}', 'Api\UserController@update');
-Route::apiResource('/tempat_wisatas', App\Http\Controllers\TempatWisataController::class);
-Route::apiResource('/tikets', App\Http\Controllers\TiketController::class);
-Route::apiResource('/trips', App\Http\Controllers\TripController::class);
-Route::apiResource('/hotels', App\Http\Controllers\HotelController::class);
+// Route::group(['middleware'=>'auth:api'],function(){
+    Route::get('users/{id}', 'Api\UserController@show');
+    Route::put('users/{id}', 'Api\UserController@update');
+    Route::post('logout', 'Api\AuthController@logout');
+    Route::apiResource('/tempat_wisatas', App\Http\Controllers\TempatWisataController::class);
+    Route::apiResource('/tikets', App\Http\Controllers\TiketController::class);
+    Route::apiResource('/trips', App\Http\Controllers\TripController::class);
+    Route::apiResource('/hotels', App\Http\Controllers\HotelController::class);
+// });

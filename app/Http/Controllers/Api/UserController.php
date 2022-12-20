@@ -47,7 +47,8 @@ class UserController extends Controller
 
         if($validate->fails())
             return response(['message' => $validate->errors()], 400);
-        
+
+            $updateData['password'] = bcrypt($request->password);
             $user->name = $updateData['name'];
             $user->password = $updateData['password'];
         

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Session;
+use Laravel\Passport\RefreshToken;
+use Laravel\Passport\Token;
 
 class AuthController extends Controller
 {
@@ -40,30 +42,30 @@ class AuthController extends Controller
         ], 200);
     }
 
-    public function login (Request $request){
-        $loginData = $request->all();
+    public function login(Request $request){
+        $loginData=$request->all();
 
-        $validate = Validator::make($loginData, [
-            'email' => 'required|email:rfc,dns',
-            'password' =>'required'
+        $validate=Validator::make($loginData,[
+            'email'=>'required|email:rfc,dns',
+            'password'=>['required'],
         ]);
 
-        if($validate->fails())    
-            return response(['message' => $validate->errors()], 400);   
- 
-        if(!Auth::attempt($loginData))    
-            return response(['message' => 'Invalid Credentials'], 401);  
+        if($validate->fails())
+            return response()->json($validate->errors(), 400);
 
-        $user = Auth::user();
-        $token = $user->createToken('Authentication Token')->accessToken; 
+        if(!Auth::attempt(($loginData)))
+            return response(['invalid' => true,'message'=>'Invalid Credentials'],401);
+       /** @var \App\Models\User $user **/
+            $user=Auth::user();
+            $token=$user->createToken('Authentication Token')->accessToken;
 
-        return response([
-            'message' => 'Authenticated',
-            'user' => $user,
-            'token_type' => 'Bearer',
-            'access_token' => $token
-        ]); 
-
+            return response()->json([
+                'success' => true,
+                'message'=>'Authenticated',
+                'user'=>$user,
+                'token_type'=>'Bearer',
+                'access_token'=>$token
+            ]);
     }
 
     public function logout(Request $request) {
