@@ -30,16 +30,17 @@ class AuthController extends Controller
          ]);
 
          if($validate->fails())    
-            return response(['message' => $validate->errors()], 400);  
+             return response()->json($validate->errors(), 400);
 
         $registrationData['password'] = bcrypt($request->password); 
 
         $user = User::create($registrationData); 
 
-        return response([
-            'message' => 'Register Success',
-            'user' => $user
-        ], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'Register Success!',
+            'user'    => $user  
+        ]);
     }
 
     public function login(Request $request){
@@ -71,8 +72,9 @@ class AuthController extends Controller
     public function logout(Request $request) {
         $user = Auth::user()->token();
         $user->revoke();
-        return response([
-            'message' => 'Logout Success',
-        ]);
+        return response()->json([
+            'success' => true,
+            'message'=>'User Logout Success'
+         ]);
     }
 }

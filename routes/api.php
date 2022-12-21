@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('register', 'Api\AuthController@register');
 Route::post('login', 'Api\AuthController@login');
 
-// Route::group(['middleware'=>'auth:api'],function(){
+Route::group(['middleware'=>'auth:api'],function(){
     Route::get('users/{id}', 'Api\UserController@show');
     Route::put('users/{id}', 'Api\UserController@update');
     Route::post('logout', 'Api\AuthController@logout');
@@ -31,4 +31,4 @@ Route::post('login', 'Api\AuthController@login');
     Route::apiResource('/tikets', App\Http\Controllers\TiketController::class);
     Route::apiResource('/trips', App\Http\Controllers\TripController::class);
     Route::apiResource('/hotels', App\Http\Controllers\HotelController::class);
-// });
+});

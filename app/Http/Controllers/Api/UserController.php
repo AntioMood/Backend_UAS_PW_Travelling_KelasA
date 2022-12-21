@@ -46,22 +46,21 @@ class UserController extends Controller
         ]);
 
         if($validate->fails())
-            return response(['message' => $validate->errors()], 400);
+            return response()->json($validate->errors(), 400);
 
             $updateData['password'] = bcrypt($request->password);
             $user->name = $updateData['name'];
             $user->password = $updateData['password'];
         
-        if($user->save()){
-            return response([
-                'message' => 'Update User Success',
-                'data' => $user
-            ], 200);
-        }
-
-        return response([
-            'message' => 'Update User Failed',
-            'data' => null
-        ], 400);
+            if($user->save()){
+                return response()->json([               
+                    'message' => 'Update User Success!',
+                    'user'    => $user  
+                ],200);
+            }
+            return response()->json([
+                'message' => 'Update User Failed',
+                'data' => null
+            ], 400);
     }
 }
